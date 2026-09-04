@@ -31,3 +31,4 @@ Build a deep understanding of JavaScript internals through:
 
 - [x] Scope
 - [x] Hoisting & Temporal Dead Zone
+- [x] Execution Context & Call Stack
