@@ -6,24 +6,23 @@ A closure occurs when a function retains access to variables from its surroundin
 
 Example:
 
+```js
 function outer() {
-let message = "Hello";
+  let message = "Hello";
 
-    function inner() {
-        console.log(message);
-    }
+  function inner() {
+    console.log(message);
+  }
 
-    return inner;
-
+  return inner;
 }
 
 const fn = outer();
 
 fn();
+```
 
-Output:
-
-Hello
+Output: Hello
 
 The inner function can still access `message`.
 
@@ -41,20 +40,21 @@ Function + Retained Lexical Environment = Closure
 
 Example:
 
+```js
 function outer() {
-let x = 10;
+  let x = 10;
 
-    function inner() {
-        console.log(x);
-    }
+  function inner() {
+    console.log(x);
+  }
 
-    return inner;
-
+  return inner;
 }
 
 const fn = outer();
 
 fn();
+```
 
 `outer()` returns the `inner` function.
 
@@ -70,14 +70,14 @@ It retains access to the original binding.
 
 Example:
 
+```js
 function createCounter() {
-let count = 0;
+  let count = 0;
 
-    return function () {
-        count++;
-        return count;
-    };
-
+  return function () {
+    count++;
+    return count;
+  };
 }
 
 const counter = createCounter();
@@ -85,6 +85,7 @@ const counter = createCounter();
 counter(); // 1
 counter(); // 2
 counter(); // 3
+```
 
 The same `count` binding is modified on each call.
 
@@ -94,23 +95,24 @@ The same `count` binding is modified on each call.
 
 Example:
 
+```js
 function createCounter() {
-let count = 0;
+  let count = 0;
 
-    return function () {
-        count++;
-        return count;
-    };
-
+  return function () {
+    count++;
+    return count;
+  };
 }
 
 const counter = createCounter();
 
-Each call modifies the retained `count` binding.
+// Each call modifies the retained `count` binding.
 
 counter(); // 1
 counter(); // 2
 counter(); // 3
+```
 
 ---
 
@@ -147,31 +149,29 @@ Lexical scope determines where variable lookup occurs.
 
 Example:
 
+```js
 let x = "global";
 
 function outer() {
-let x = "outer";
+  let x = "outer";
 
-    return function inner() {
-        console.log(x);
-    };
-
+  return function inner() {
+    console.log(x);
+  };
 }
 
 const fn = outer();
 
 function another() {
-let x = "another";
+  let x = "another";
 
-    fn();
-
+  fn();
 }
 
 another();
+```
 
-Output:
-
-outer
+Output: outer
 
 `inner()` was defined inside `outer()`, so its lexical environment gives it access to `outer()`'s `x`.
 
@@ -213,16 +213,17 @@ If a function still has access to a lexical environment, that environment remain
 
 Example:
 
+```js
 function createCounter() {
-let count = 0;
+  let count = 0;
 
-    return function () {
-        count++;
-    };
-
+  return function () {
+    count++;
+  };
 }
 
 const counter = createCounter();
+```
 
 The lexical environment containing `count` remains reachable through `counter`.
 

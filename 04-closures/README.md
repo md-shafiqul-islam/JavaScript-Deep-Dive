@@ -23,24 +23,23 @@ A closure occurs when a function retains access to bindings from its surrounding
 
 Example:
 
+```js
 function outer() {
-let message = "Hello";
+  let message = "Hello";
 
-    function inner() {
-        console.log(message);
-    }
+  function inner() {
+    console.log(message);
+  }
 
-    return inner;
-
+  return inner;
 }
 
 const fn = outer();
 
 fn();
+```
 
-Output:
-
-Hello
+Output: Hello
 
 The inner function retains access to the lexical environment containing `message`.
 

@@ -69,11 +69,13 @@ A Function Execution Context (FEC) is created when a function is called.
 
 Example:
 
+```js
 function test() {
-console.log("Hello");
+  console.log("Hello");
 }
 
 test();
+```
 
 The function binding exists before the call executes, but the Function Execution Context is created when:
 
@@ -93,19 +95,21 @@ Last In, First Out
 
 Example:
 
+```js
 function first() {
-second();
+  second();
 }
 
 function second() {
-third();
+  third();
 }
 
 function third() {
-console.log("Hello");
+  console.log("Hello");
 }
 
 first();
+```
 
 When third() is executing:
 
@@ -122,13 +126,9 @@ When third() completes, it is popped from the stack.
 
 ## 7. Lexical Scope vs Call Stack
 
-Lexical Scope answers:
+Lexical Scope answers: "Where does JavaScript search for a variable?"
 
-"Where does JavaScript search for a variable?"
-
-Call Stack answers:
-
-"Which function is currently executing?"
+Call Stack answers: "Which function is currently executing?"
 
 Variable lookup follows lexical scope.
 
@@ -136,24 +136,23 @@ It does NOT follow the Call Stack.
 
 Example:
 
+```js
 var x = "global";
 
 function outer() {
-var x = "outer";
+  var x = "outer";
 
-    function inner() {
-        console.log(x);
-    }
+  function inner() {
+    console.log(x);
+  }
 
-    inner();
-
+  inner();
 }
 
 outer();
+```
 
-inner() finds:
-
-x -> outer
+inner() finds: x === outer
 
 because inner() was defined inside outer().
 
