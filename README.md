@@ -33,3 +33,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Hoisting & Temporal Dead Zone
 - [x] Execution Context & Call Stack
 - [x] Closures
+- [x] `this`
