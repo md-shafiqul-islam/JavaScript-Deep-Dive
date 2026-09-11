@@ -34,3 +34,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Execution Context & Call Stack
 - [x] Closures
 - [x] `this`
+- [x] Functions, Callbacks & Higher-Order Functions
