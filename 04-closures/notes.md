@@ -1,74 +1,44 @@
 # Notes — Closures
 
-## 1. What Is a Closure?
+## Closure
 
 A closure occurs when a function retains access to variables from its surrounding lexical environment, even after the outer function has finished executing.
 
-Example:
-
-```js
-function outer() {
-  let message = "Hello";
-
-  function inner() {
-    console.log(message);
-  }
-
-  return inner;
-}
-
-const fn = outer();
-
-fn();
+```text
+Function
++
+Retained Lexical Environment
+=
+Closure
 ```
 
-Output: Hello
-
-The inner function can still access `message`.
-
 ---
 
-## 2. Closure Relationship
+## Returned Function
 
-Conceptually:
-
-Function + Retained Lexical Environment = Closure
-
----
-
-## 3. Closure With Returned Function
-
-Example:
+A returned function can retain access to the lexical environment where it was created.
 
 ```js
 function outer() {
   let x = 10;
 
-  function inner() {
+  return function inner() {
     console.log(x);
-  }
-
-  return inner;
+  };
 }
 
 const fn = outer();
 
-fn();
+fn(); // 10
 ```
 
-`outer()` returns the `inner` function.
-
-The returned function retains access to the lexical environment containing `x`.
+`inner` retains access to `x` after `outer()` finishes.
 
 ---
 
-## 4. Closure Does Not Copy Variables
+## Closure Does Not Copy Variables
 
-A closure does not create a copy of the variable.
-
-It retains access to the original binding.
-
-Example:
+A closure retains access to the **original binding**.
 
 ```js
 function createCounter() {
@@ -91,63 +61,50 @@ The same `count` binding is modified on each call.
 
 ---
 
-## 5. Closure State
+## Closure State
 
-Example:
+Closures allow state to persist between function calls.
 
-```js
-function createCounter() {
-  let count = 0;
-
-  return function () {
-    count++;
-    return count;
-  };
-}
-
-const counter = createCounter();
-
-// Each call modifies the retained `count` binding.
-
-counter(); // 1
-counter(); // 2
-counter(); // 3
+```text
+createCounter()
+      ↓
+  count = 0
+      ↓
+returned function
+      ↓
+retains count
+      ↓
+1 → 2 → 3
 ```
 
 ---
 
-## 6. Independent Closure Instances
+## Independent Closures
 
-Calling the outer function multiple times creates separate lexical environments.
+Each call to the outer function creates a separate lexical environment.
 
-Example:
-
+```js
 const counterA = createCounter();
 const counterB = createCounter();
+```
 
 Conceptually:
 
-counterA
-↓
-Closure A
-↓
-count = 0
+```text
+counterA → Closure A → count = 0
 
-counterB
-↓
-Closure B
-↓
-count = 0
+counterB → Closure B → count = 0
+```
 
 They do not share the same `count` binding.
 
 ---
 
-## 7. Lexical Scope and Closure
+## Lexical Scope and Closure
 
 Lexical scope determines where variable lookup occurs.
 
-Example:
+A closure retains access to the lexical environment where the function was defined.
 
 ```js
 let x = "global";
@@ -164,74 +121,51 @@ const fn = outer();
 
 function another() {
   let x = "another";
-
   fn();
 }
-
-another();
 ```
 
-Output: outer
+`fn()` uses:
 
-`inner()` was defined inside `outer()`, so its lexical environment gives it access to `outer()`'s `x`.
+```text
+x → "outer"
+```
 
-It does not use the `x` from `another()`.
-
----
-
-## 8. Closure and Call Stack
-
-When outer() executes:
-
-Call Stack:
-
-outer()
-Global
-
-When outer() finishes:
-
-Call Stack:
-
-Global
-
-Later, when the returned function executes:
-
-Call Stack:
-
-inner()
-Global
-
-The variable `x` is not found through the Call Stack.
-
-It is resolved through the function's retained lexical environment.
+It does not use `x` from `another()`.
 
 ---
 
-## 9. Closure and Garbage Collection
+## Closure and Call Stack
 
-If a function still has access to a lexical environment, that environment remains reachable.
+Closure and Call Stack are different concepts.
 
-Example:
+```text
+Call Stack
+→ controls execution order
+
+Closure
+→ retains access to lexical bindings
+```
+
+When the outer function finishes, its execution context leaves the Call Stack, but a retained lexical environment can still be accessed through the closure.
+
+Variable lookup does **not** follow the Call Stack.
+
+---
+
+## Closure and Garbage Collection
+
+A retained lexical environment remains reachable while a closure can still access it.
 
 ```js
-function createCounter() {
-  let count = 0;
-
-  return function () {
-    count++;
-  };
-}
-
 const counter = createCounter();
 ```
 
-The lexical environment containing `count` remains reachable through `counter`.
-
-Therefore it can continue to be used.
+As long as `counter` remains reachable, the environment containing `count` can remain reachable as well.
 
 ---
 
-## 10. Common Uses
+## Common Uses
 
 Closures are commonly used for:
 
@@ -242,20 +176,18 @@ Closures are commonly used for:
 - Callbacks
 - Event handlers
 - Memoization
-- Maintaining state between function calls
 
 ---
 
-## 11. Core Mental Model
+## Core Mental Model
 
+```text
 Lexical Scope
-↓
-Determines variable lookup
+→ determines where variable lookup occurs
 
 Closure
-↓
-Retains access to outer lexical bindings
+→ retains access to outer lexical bindings
 
 Call Stack
-↓
-Controls execution order
+→ controls execution order
+```

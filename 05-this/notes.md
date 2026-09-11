@@ -1,82 +1,32 @@
 # Notes — `this`
 
-## 1. What Is `this`?
+## `this`
 
-`this` is a special keyword whose value depends on how a function is called.
+`this` refers to the value associated with the current function call.
 
-For normal functions, `this` is generally determined at runtime by the call site.
+For normal functions, `this` is determined by **how the function is called**.
 
 ---
 
-## 2. Method Call
-
-Example:
+## Method Call
 
 ```js
-const user = {
-  name: "Shafiqul",
-
-  greet() {
-    console.log(this.name);
-  },
-};
-
 user.greet();
 ```
 
-Output: Shafiqul
+When called as `object.method()`:
 
-Here: this === user
-
-The object before the dot becomes `this`.
-
----
-
-## 3. Same Function, Different Objects
-
-Example:
-
-```js
-const user1 = {
-  name: "Alice",
-};
-
-const user2 = {
-  name: "Bob",
-};
-
-function greet() {
-  console.log(this.name);
-}
-
-user1.greet = greet;
-user2.greet = greet;
-
-user1.greet();
-user2.greet();
+```text
+this === object
 ```
 
-Output: Alice Bob
-
-The same function is used in both cases.
-
-The call site determines `this`.
-
-user1.greet()
-→ this === user1
-
-user2.greet()
-→ this === user2
-
 ---
 
-## 4. Regular Function Call
+## Regular Function Call
 
-Example:
+In strict mode:
 
 ```js
-"use strict";
-
 function showThis() {
   console.log(this);
 }
@@ -84,238 +34,129 @@ function showThis() {
 showThis();
 ```
 
-Output: undefined
-
-A regular function called without an object has:
-
+```text
 this === undefined
-
-when strict mode is enabled.
+```
 
 ---
 
-## 5. Losing `this`
-
-Example:
+## Losing `this`
 
 ```js
-"use strict";
-
-const user = {
-  name: "Shafiqul",
-
-  greet() {
-    console.log(this.name);
-  },
-};
-
-user.greet();
-
 const fn = user.greet;
 
 fn();
 ```
 
-First call: this === user
+A method does not keep its original object when the function reference is separated from the object.
 
-Second call: this === undefined
-
-Assigning the method to another variable does not preserve the original object as `this`.
-
----
-
-## 6. Normal Function Inside a Method
-
-Example:
-
-```js
-"use strict";
-
-const user = {
-  name: "Shafiqul",
-
-  greet() {
-    function inner() {
-      console.log(this);
-    }
-
-    inner();
-  },
-};
-
-user.greet();
+```text
+user.greet() → this === user
+fn()         → this === undefined
 ```
 
-Inside greet(): this === user
+---
 
-Inside inner(): this === undefined
+## Nested Normal Function
 
-`inner()` is a separate normal function.
+A normal function inside a method does **not** inherit the outer function's `this`.
 
-Its `this` is determined by its own call: inner();
+```text
+user.greet()
+→ this === user
 
-It does not automatically inherit `this` from greet().
+inner()
+→ separate function call
+→ this === undefined  (strict mode)
+```
 
 ---
 
-## 7. Arrow Functions
+## Arrow Function
 
 Arrow functions do not have their own `this`.
 
-They inherit `this` from their surrounding lexical context.
+They inherit `this` from the surrounding lexical context.
 
-Example:
+```text
+normal function
+→ own this
+→ determined by call
 
-```js
-"use strict";
-
-const user = {
-  name: "Shafiqul",
-
-  greet() {
-    const inner = () => {
-      console.log(this.name);
-    };
-
-    inner();
-  },
-};
-
-user.greet();
-```
-
-Output: Shafiqul
-
-greet(): this === user
-
-inner(): Arrow function has no own `this`.
-
-It inherits `this` from greet(): this === user
-
----
-
-## 8. Normal Function vs Arrow Function
-
-Normal function:
-
-- Has its own `this` binding.
-- `this` is determined by how it is called.
-
-Arrow function:
-
-- Does not have its own `this`.
-- Inherits `this` from its surrounding lexical context.
-
----
-
-## 9. call()
-
-`call()` explicitly sets `this`.
-
-Example:
-
-```js
-function greet() {
-  console.log(this.name);
-}
-
-const user = {
-  name: "Shafiqul",
-};
-
-greet.call(user);
-```
-
-Output: Shafiqul
-
-this === user
-
----
-
-## 10. apply()
-
-`apply()` also explicitly sets `this`.
-
-Example:
-
-```js
-function introduce(age) {
-  console.log(this.name, age);
-}
-
-const user = {
-  name: "Shafiqul",
-};
-
-introduce.apply(user, [30]);
+arrow function
+→ no own this
+→ inherits surrounding this
 ```
 
 ---
 
-## 11. bind()
+## `call()`, `apply()`, `bind()`
 
-`bind()` creates a new function with `this` bound to the provided object.
+All three can control `this`.
 
-Example:
+```text
+call(obj)
+→ calls immediately
+→ arguments separately
 
-```js
-function greet() {
-  console.log(this.name);
-}
+apply(obj, [...])
+→ calls immediately
+→ arguments as an array
 
-const user = {
-  name: "Shafiqul",
-};
-
-const boundGreet = greet.bind(user);
-
-boundGreet();
+bind(obj)
+→ returns a new function
+→ this is bound for that function
 ```
 
-Output: Shafiqul
+---
+
+## Same Function, Different `this`
+
+The same normal function can have different `this` values.
+
+```js
+user1.greet();
+user2.greet();
+```
+
+```text
+same function
+→ different call sites
+→ different this values
+```
 
 ---
 
-## 12. Core Rules
+## Scope vs `this`
 
-Normal function:
+These are different mechanisms.
 
-obj.method()
-→ this === obj
+```text
+Scope
+→ where the function is defined
+→ determines variable lookup
 
-Regular function in strict mode:
+this
+→ how the function is called
+→ determines this value
+```
 
-method()
-→ this === undefined
+Arrow functions are the important connection:
 
-Explicit binding:
-
-method.call(obj)
-→ this === obj
-
-method.apply(obj)
-→ this === obj
-
-method.bind(obj)
-→ this is permanently bound to obj for the new function
-
-Arrow function:
-
-No own `this`
-→ inherits `this` from surrounding lexical context
+```text
+Arrow function
+→ lexical this
+→ inherits from surrounding context
+```
 
 ---
 
-## 13. Scope vs `this`
+## Core Mental Model
 
-Lexical scope: "Where does JavaScript look for a variable?"
+```text
+Normal function
+→ this = call site
 
-`this`: "What is the `this` value for this function call?"
-
-These are separate mechanisms.
-
-Important:
-
-Lexical scope is determined by where a function is defined.
-
-For normal functions, `this` is determined by how the function is called.
+Arrow function
+→ this = surrounding lexical context
+```
