@@ -35,3 +35,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Closures
 - [x] `this`
 - [x] Functions, Callbacks & Higher-Order Functions
+- [x] Event Loop
