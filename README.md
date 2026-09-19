@@ -37,3 +37,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Functions, Callbacks & Higher-Order Functions
 - [x] Event Loop
 - [x] Objects & Object References
+- [x] Object Methods & this
