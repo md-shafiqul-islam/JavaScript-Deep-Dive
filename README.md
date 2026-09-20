@@ -38,3 +38,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Event Loop
 - [x] Objects & Object References
 - [x] Object Methods & this
+- [x] Prototypes & Prototype Chain
