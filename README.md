@@ -40,3 +40,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Object Methods & this
 - [x] Prototypes & Prototype Chain
 - [x] Constructor Functions
+- [x] Classes
