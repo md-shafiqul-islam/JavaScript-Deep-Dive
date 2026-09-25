@@ -42,3 +42,4 @@ Build a deep understanding of JavaScript internals through:
 - [x] Constructor Functions
 - [x] Classes
 - [x] Object-Oriented JavaScript
+- [x] Asynchronous JavaScript
